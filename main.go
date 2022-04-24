@@ -6,10 +6,16 @@ import (
 	"log"
 	"os"
 	"strings"
+	"flag"
 )
 
 func main() {
-	f, err := os.Open("myapp.log")
+    path := flag.String("path", "myapp.log", "The path to the log that should be analyzed")
+	level := flag.String("level", "ERROR", "Log level to search for. Options are DEBUG, INFO, ERROR, and CRITICAL")
+
+	flag.Parse()
+
+	f, err := os.Open(*path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -20,7 +26,7 @@ func main() {
 		if err != nil {
 			break
 		}
-		if strings.Contains(s, "ERROR") {
+		if strings.Contains(s, *level) {
 			fmt.Println(s)
 		}
 	}
